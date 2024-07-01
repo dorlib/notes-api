@@ -1,0 +1,24 @@
+version: '3.9'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8083:8083"
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=${PASSWORD}
+      - MYSQL_DB=notesapp
+    depends_on:
+      - mysql
+
+  mysql:
+    image: "mysql:latest"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${PASSWORD}
+      MYSQL_DATABASE: notesapp
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "3307:3306"
